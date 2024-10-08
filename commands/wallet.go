@@ -121,8 +121,8 @@ Example Schema:
 
 	update := &cobra.Command{
 		Use:   "update APP_ID WALLET_ID [JSON_PAYLOAD]",
-		Short: "Update an application by id",
-		Long: `Update an application by id
+		Short: "Update an wallet by id",
+		Long: `Update an wallet by id
 
 Example Schema:
 {
