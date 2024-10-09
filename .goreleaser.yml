@@ -1,0 +1,91 @@
+# This is an example .goreleaser.yml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: openwallet
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: openwallet
+    main: ./cmd/main.go
+    ldflags:
+      - -s -w -X github.com/openweb3-io/openwallet-cli/version.Version={{ .Version }}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    ignore:
+      - goos: windows
+        goarch: arm64
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+nfpms:
+  - builds:
+      - openwallet
+    vendor: OpenWallet
+    homepage: https://wallet.openweb3.io
+    maintainer: OpenWallet <support@openweb3.io>
+    description: OpenWallet CLI utility
+    formats:
+      - deb
+      - rpm
+      - apk
+brews:
+  - repository:
+      owner: openwallet
+      name: homebrew-openwallet
+    commit_author:
+      name: openwallet-ci
+      email: support@openweb3.com
+    homepage: https://www.openweb3.io
+    description: OpenWallet CLI utility
+    install: |
+      bin.install "openwallet"
+    caveats: "Thanks for installing the OpenWallet CLI! If this is your first time using the CLI, checkout our docs at https://docs.openweb3.io."
+scoops:
+  -
+    repository:
+      owner: openwallet
+      name: scoop-openwallet
+    commit_author:
+      name: openwallet-ci
+      email: support@openweb3.io
+    homepage: https://wallet.openweb3.io
+    description: OpenWallet CLI utility
+snapcrafts:
+  -
+    name: openwallet
+    publish: true
+    summary: OpenWallet CLI utility
+    description: |
+      OpenWallet makes it easy to send webhook from your service while ensuring robust deliverability and a great developer experience for your users.
+      You can think of it as webhooks as a service. https://docs.openweb3.io/
+    grade: stable
+    confinement: strict
+    license: GPL-3.0
+    base: core20
+
+    apps:
+      openwallet:
+        plugs: ["network"]
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

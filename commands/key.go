@@ -2,6 +2,7 @@ package commands
 
 import (
 	"crypto/ed25519"
+	"crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"os"
@@ -35,7 +36,7 @@ func newKeyCmd() *keyCmd {
 }
 
 func (lc *keyCmd) generate(cmd *cobra.Command, args []string) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
+	apikey, secret, err := GenerateApiKey()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		fmt.Fprintln(os.Stderr, "Failed to generate private key, please try again.")
@@ -43,10 +44,17 @@ func (lc *keyCmd) generate(cmd *cobra.Command, args []string) {
 
 	}
 
-	publicKeyStr := hex.EncodeToString(publicKey)
-	privateKeyStr := hex.EncodeToString(privateKey)
-
 	fmt.Println("Key generated")
-	fmt.Printf("Private Key(hex): %s\n", privateKeyStr)
-	fmt.Printf("Public Key(hex): %s\n", publicKeyStr)
+	fmt.Printf("apikey: %s\n", apikey)
+	fmt.Printf("secret: %s\n", secret)
+}
+
+func GenerateApiKey() (apiKey, apiSecret string, err error) {
+	pk, sk, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		return "", "", err
+	}
+	apiSecret = hex.EncodeToString(sk.Seed())
+	apiKey = hex.EncodeToString(pk)
+	return
 }

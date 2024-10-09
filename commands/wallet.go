@@ -29,10 +29,9 @@ func newWalletCmd() *walletCmd {
 		Short: "List wallets",
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
-			appID := args[0]
 
 			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Wallet.List(cmd.Context(), appID, getWalletListOptions(cmd))
+			l, err := walletClient.Wallet.List(cmd.Context(), getWalletListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -55,12 +54,9 @@ Example Schema:
 	"uid": "wallet-uid"
   }
 `,
-		Args: validators.RangeArgs(1, 2),
+		Args: validators.RangeArgs(0, 1),
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
-
-			// parse positional args
-			appID := args[0]
 
 			var in []byte
 			if len(args) > 1 {
@@ -90,7 +86,7 @@ Example Schema:
 			}
 
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Create(cmd.Context(), appID, &wallet)
+			out, err := walletClient.Wallet.Create(cmd.Context(), &wallet)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -107,11 +103,10 @@ Example Schema:
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			appID := args[0]
 			walletID := args[1]
 
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Retrieve(cmd.Context(), appID, walletID)
+			out, err := walletClient.Wallet.Retrieve(cmd.Context(), walletID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -130,12 +125,11 @@ Example Schema:
   "uid": "uid"
 }
 `,
-		Args: validators.RangeArgs(2, 3),
+		Args: validators.RangeArgs(1, 2),
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
 			// parse args
-			appID := args[0]
 			walletID := args[1]
 
 			var in []byte
@@ -166,7 +160,7 @@ Example Schema:
 			}
 
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Update(cmd.Context(), appID, walletID, &wallet)
+			out, err := walletClient.Wallet.Update(cmd.Context(), walletID, &wallet)
 			printer.CheckErr(err)
 
 			printer.Print(out)
