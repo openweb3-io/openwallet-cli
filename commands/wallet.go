@@ -44,7 +44,7 @@ func newWalletCmd() *walletCmd {
 	nameFlagName := "data-name"
 	uidFlagName := "data-uid"
 	create := &cobra.Command{
-		Use:   "create APP_ID [JSON_PAYLOAD]",
+		Use:   "create [JSON_PAYLOAD]",
 		Short: "Create a new wallet",
 		Long: `Create a new wallet
 
@@ -97,13 +97,13 @@ Example Schema:
 	wc.cmd.AddCommand(create)
 
 	get := &cobra.Command{
-		Use:   "get APP_ID WALLET_ID",
+		Use:   "get WALLET_ID",
 		Short: "get wallet by id",
-		Args:  validators.ExactArgs(2),
+		Args:  validators.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletID := args[1]
+			walletID := args[0]
 
 			walletClient := getWalletClientOrExit()
 			out, err := walletClient.Wallet.Retrieve(cmd.Context(), walletID)
@@ -115,7 +115,7 @@ Example Schema:
 	wc.cmd.AddCommand(get)
 
 	update := &cobra.Command{
-		Use:   "update APP_ID WALLET_ID [JSON_PAYLOAD]",
+		Use:   "update WALLET_ID [JSON_PAYLOAD]",
 		Short: "Update an wallet by id",
 		Long: `Update an wallet by id
 
@@ -130,7 +130,7 @@ Example Schema:
 			printer := pretty.NewPrinter(getPrinterOptions())
 
 			// parse args
-			walletID := args[1]
+			walletID := args[0]
 
 			var in []byte
 			if len(args) > 2 {
@@ -172,7 +172,7 @@ Example Schema:
 
 	/*
 		delete := &cobra.Command{
-			Use:   "delete APP_ID WALLET_ID",
+			Use:   "delete WALLET_ID",
 			Short: "Delete an wallet by id",
 			Args:  validators.ExactArgs(2),
 			Run: func(cmd *cobra.Command, args []string) {
