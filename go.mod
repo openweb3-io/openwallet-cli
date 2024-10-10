@@ -1,6 +1,6 @@
 module github.com/openweb3-io/openwallet-cli
 
-go 1.22.6
+go 1.23
 
 require (
 	github.com/BurntSushi/toml v1.4.0
