@@ -42,7 +42,7 @@ func newAddressCmd() *addressCmd {
 
 	// get
 	get := &cobra.Command{
-		Use:   "get DEPOSIT_ADDRESS",
+		Use:   "get",
 		Short: "Get an deposit address by network",
 		Args:  validators.ExactArgs(3),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -66,7 +66,6 @@ func newAddressCmd() *addressCmd {
 
 			// 打印二维码到终端
 			fmt.Println(qrCode.ToSmallString(true))
-
 		},
 	}
 	wc.cmd.AddCommand(get)
