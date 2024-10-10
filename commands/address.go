@@ -1,9 +1,12 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/openweb3-io/openwallet-cli/pretty"
 	"github.com/openweb3-io/openwallet-cli/validators"
 	wallet "github.com/openweb3-io/wallet-openapi/go"
+	"github.com/skip2/go-qrcode"
 	"github.com/spf13/cobra"
 )
 
@@ -57,6 +60,13 @@ func newAddressCmd() *addressCmd {
 			printer.CheckErr(err)
 
 			printer.Print(out)
+
+			qrCode, err := qrcode.New(out.Address, qrcode.Medium)
+			printer.CheckErr(err)
+
+			// 打印二维码到终端
+			fmt.Println(qrCode.ToSmallString(true))
+
 		},
 	}
 	wc.cmd.AddCommand(get)
