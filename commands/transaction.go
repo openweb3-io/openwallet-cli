@@ -55,6 +55,79 @@ func newTransactionCmd() *transactionCmd {
 	}
 	wc.cmd.AddCommand(get)
 
+	// estimateFee
+	currencyFlagName := "data-currency"
+	fromFlagName := "data-from"
+	toFlagName := "data-to"
+	feeTypeFlagName := "data-feeType"
+	estimateFee := &cobra.Command{
+		Use:   "estimate-fee [JSON_PAYLOAD]",
+		Short: "Estimate fee",
+		Long: `Estimate fee
+	
+	Example Schema:
+	{
+		"currency": "string",
+		"from": "string",
+		"to": "string",
+		"feeType": "string"
+	  }
+	`,
+		Args: validators.RangeArgs(0, 1),
+		Run: func(cmd *cobra.Command, args []string) {
+			/*
+				printer := pretty.NewPrinter(getPrinterOptions())
+				var in []byte
+				if len(args) > 0 {
+					in = []byte(args[0])
+				} else {
+					var err error
+					in, err = utils.ReadStdin()
+					printer.CheckErr(err)
+				}
+
+				var req wallet.EstimateFeeIn
+				if len(in) > 0 {
+					err := json.Unmarshal(in, &req)
+					printer.CheckErr(err)
+				}
+
+				// get flags
+				if cmd.Flags().Changed(currencyFlagName) {
+					currencyFlag, err := cmd.Flags().GetString(currencyFlagName)
+					printer.CheckErr(err)
+					req.Currency = currencyFlag
+				}
+				if cmd.Flags().Changed(fromFlagName) {
+					fromFlag, err := cmd.Flags().GetString(fromFlagName)
+					printer.CheckErr(err)
+					req.From = fromFlag
+				}
+				if cmd.Flags().Changed(toFlagName) {
+					toFlag, err := cmd.Flags().GetString(toFlagName)
+					printer.CheckErr(err)
+					req.To = toFlag
+				}
+				if cmd.Flags().Changed(feeTypeFlagName) {
+					feeTypeFlag, err := cmd.Flags().GetString(feeTypeFlagName)
+					printer.CheckErr(err)
+					req.feeType = feeTypeFlag
+				}
+
+				walletClient := getWalletClientOrExit()
+				walletClient.Transaction.EstimateFee()
+				out, err := walletClient.Webhook.Create(cmd.Context(), &req)
+				printer.CheckErr(err)
+				printer.Print(out)
+			*/
+		},
+	}
+	estimateFee.Flags().String(currencyFlagName, "", "")
+	estimateFee.Flags().String(fromFlagName, "", "")
+	estimateFee.Flags().String(toFlagName, "", "")
+	estimateFee.Flags().String(feeTypeFlagName, "", "")
+	wc.cmd.AddCommand(estimateFee)
+
 	return wc
 }
 
@@ -64,10 +137,10 @@ func addTransactionFilterFlags(cmd *cobra.Command) {
 }
 
 func getTransactionListOptions(cmd *cobra.Command) *wallet.ListTransactionOptions {
-	limit, _ := cmd.Flags().GetInt("limit")
+	limit, _ := cmd.Flags().GetInt32("limit")
 
 	opts := &wallet.ListTransactionOptions{
-		Limit: limit,
+		Limit: &limit,
 	}
 
 	cursorFlag, _ := cmd.Flags().GetString("cursor")

@@ -49,10 +49,10 @@ func addAccountFilterFlags(cmd *cobra.Command) {
 }
 
 func getAccountListOptions(cmd *cobra.Command) *wallet.ListAccountsOptions {
-	limit, _ := cmd.Flags().GetInt("limit")
+	limit, _ := cmd.Flags().GetInt32("limit")
 
 	opts := &wallet.ListAccountsOptions{
-		Limit: limit,
+		Limit: &limit,
 	}
 
 	cursorFlag, _ := cmd.Flags().GetString("cursor")

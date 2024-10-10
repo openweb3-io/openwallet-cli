@@ -68,24 +68,24 @@ func (lc *loginCmd) run(cmd *cobra.Command, args []string) {
 		viper.Set("apikey", apikey)
 	}
 
-	// get private key
-	defaultPrivateKey := viper.GetString("private_key")
-	privateKeyPrompt := promptui.Prompt{
-		Label:   "OpenWallet Private Key",
-		Default: defaultPrivateKey,
+	// get secret
+	defaultSecret := viper.GetString("secret")
+	secretPrompt := promptui.Prompt{
+		Label:   "OpenWallet Secret",
+		Default: defaultSecret,
 	}
-	privateKey, err := privateKeyPrompt.Run()
+	secret, err := secretPrompt.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Initialization failed %v\n", err)
 		os.Exit(1)
 	}
-	if privateKey != defaultPrivateKey && privateKey != "" {
-		viper.Set("private_key", privateKey)
+	if secret != defaultSecret && secret != "" {
+		viper.Set("secret", secret)
 	}
 
 	if err := config.Write(viper.AllSettings()); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
-		fmt.Fprintln(os.Stderr, "Failed to configure the OpenWallet CLI, please try again or try setting your auth token manually 'OPENWALLET_PRIVATE_KEY' environment variable.")
+		fmt.Fprintln(os.Stderr, "Failed to configure the OpenWallet CLI, please try again or try setting your auth token manually 'OPENWALLET_SECRET' environment variable.")
 		os.Exit(1)
 	}
 

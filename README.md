@@ -90,8 +90,8 @@ Example:
 ## Interacting with the OpenWallet server
 
 ```sh
-# Set your Private Key temporarily via the OPENWALLET_PRIVATE_KEY environment variable
-export OPENWALLET_PRIVATE_KEY=<MY-PRIVATE-KEY>
+# Set your Secret temporarily via the OPENWALLET_SECRET environment variable
+export OPENWALLET_SECRET=<MY-SECRET>
 # or to persistently store your auth token in a config file run
 openwallet login # interactively configure your OpenWallet API credentials
 

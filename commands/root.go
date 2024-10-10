@@ -88,18 +88,18 @@ func initConfig() {
 
 func getWalletClientOrExit() *wallet.WalletClient {
 	apikey := viper.GetString("apikey")
-	privateKey := viper.GetString("private_key")
-	if privateKey == "" {
-		fmt.Fprintln(os.Stderr, "No OPENWALLET_PRIVATE_KEY found!")
+	secret := viper.GetString("secret")
+	if secret == "" {
+		fmt.Fprintln(os.Stderr, "No OPENWALLET_SECRET found!")
 		fmt.Fprintln(os.Stderr, "Try running `openwallet login` to get started!")
 		os.Exit(1)
 	}
 
-	opts := getWalletClientOptsOrExit(apikey, privateKey)
+	opts := getWalletClientOptsOrExit(apikey, secret)
 	return wallet.New(opts)
 }
 
-func getWalletClientOptsOrExit(apikey, privateKey string) *wallet.WalletClientOptions {
+func getWalletClientOptsOrExit(apikey, secret string) *wallet.WalletClientOptions {
 	opts := &wallet.WalletClientOptions{}
 	rawServerUrl := viper.GetString("server_url")
 
@@ -117,7 +117,7 @@ func getWalletClientOptsOrExit(apikey, privateKey string) *wallet.WalletClientOp
 		opts.ServerUrl = serverUrl
 	}
 	opts.ApiKey = apikey
-	opts.PrivateKey = privateKey
+	opts.Secret = secret
 
 	return opts
 }

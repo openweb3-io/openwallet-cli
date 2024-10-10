@@ -6,7 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/openweb3-io/wallet-openapi/go v0.0.0-20241009182546-fd06e2ad612c
+	github.com/openweb3-io/wallet-openapi/go v0.0.0-20241010093530-462fbdc1c400
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	github.com/tidwall/pretty v1.2.1

@@ -34,8 +34,27 @@ func newCurrencyCmd() *currencyCmd {
 			printer.Print(l)
 		},
 	}
-	addTransactionFilterFlags(list)
+	addCurrencyFilterFlags(list)
 	wc.cmd.AddCommand(list)
+
+	// get
+	get := &cobra.Command{
+		Use:   "get CURRENCY_CODE",
+		Short: "Get an currency by code",
+		Args:  validators.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			printer := pretty.NewPrinter(getPrinterOptions())
+
+			code := args[0]
+
+			walletClient := getWalletClientOrExit()
+			out, err := walletClient.Currency.FindByCode(cmd.Context(), code)
+			printer.CheckErr(err)
+
+			printer.Print(out)
+		},
+	}
+	wc.cmd.AddCommand(get)
 
 	return wc
 }
@@ -45,10 +64,10 @@ func addCurrencyFilterFlags(cmd *cobra.Command) {
 	cmd.Flags().Int32P("limit", "l", 50, "max items per request")
 }
 
-func getCurrencyListOptions(cmd *cobra.Command) *wallet.CurrencyListOptions {
+func getCurrencyListOptions(cmd *cobra.Command) *wallet.ListCurrencyOptions {
 	limit, _ := cmd.Flags().GetInt32("limit")
 
-	opts := &wallet.CurrencyListOptions{
+	opts := &wallet.ListCurrencyOptions{
 		Limit: &limit,
 	}
 

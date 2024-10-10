@@ -24,13 +24,13 @@ func newEndpointCmd() *endpointCmd {
 
 	// list
 	list := &cobra.Command{
-		Use:   "list APP_ID",
+		Use:   "list",
 		Short: "List current endpoints",
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			svixClient := getWalletClientOrExit()
-			l, err := svixClient.Webhook.List(cmd.Context(), getEndpointListOptions(cmd))
+			walletClient := getWalletClientOrExit()
+			l, err := walletClient.Webhook.List(cmd.Context(), getEndpointListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -42,7 +42,7 @@ func newEndpointCmd() *endpointCmd {
 	// create
 	urlFlagName := "data-url"
 	versionFlagName := "data-version"
-	filterTypesFlagName := "data-filterTypes"
+	eventTypesFlagName := "data-eventTypes"
 	disabledFlagName := "data-disabled"
 	create := &cobra.Command{
 		Use:   "create [JSON_PAYLOAD]",
@@ -54,7 +54,7 @@ Example Schema:
 	"url": "string",
 	"version": 1,
 	"description": "",
-	"filterTypes": [
+	"eventTypes": [
 	  "string"
 	]
   }
@@ -82,18 +82,18 @@ Example Schema:
 				printer.CheckErr(err)
 				ep.Url = urlFlag
 			}
-			if cmd.Flags().Changed(filterTypesFlagName) {
-				// TODO filterTypesFlag, err := cmd.Flags().GetStringArray(filterTypesFlagName)
-				// TODO printer.CheckErr(err)
-				// TODO ep.EventTypes = filterTypesFlag
+			if cmd.Flags().Changed(eventTypesFlagName) {
+				eventTypesFlag, err := cmd.Flags().GetStringArray(eventTypesFlagName)
+				printer.CheckErr(err)
+				ep.EventTypes = eventTypesFlag
 			}
 			if cmd.Flags().Changed(disabledFlagName) {
 				disabledFlag, err := cmd.Flags().GetBool(disabledFlagName)
 				printer.CheckErr(err)
 				ep.Disabled = &disabledFlag
 			}
-			svixClient := getWalletClientOrExit()
-			out, err := svixClient.Webhook.Create(cmd.Context(), &ep)
+			walletClient := getWalletClientOrExit()
+			out, err := walletClient.Webhook.Create(cmd.Context(), &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -101,7 +101,7 @@ Example Schema:
 	}
 	create.Flags().String(urlFlagName, "", "")
 	create.Flags().Int32(versionFlagName, 0, "")
-	create.Flags().StringArray(filterTypesFlagName, []string{}, "")
+	create.Flags().StringArray(eventTypesFlagName, []string{}, "")
 	create.Flags().Bool(disabledFlagName, false, "")
 	ec.cmd.AddCommand(create)
 
@@ -113,10 +113,10 @@ Example Schema:
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			endpointID := args[1]
+			endpointID := args[0]
 
-			svixClient := getWalletClientOrExit()
-			out, err := svixClient.Webhook.Retrieve(cmd.Context(), endpointID)
+			walletClient := getWalletClientOrExit()
+			out, err := walletClient.Webhook.Retrieve(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -125,7 +125,7 @@ Example Schema:
 	ec.cmd.AddCommand(get)
 
 	update := &cobra.Command{
-		Use:   "update APP_ID ENDPOINT_ID [JSON_PAYLOAD]",
+		Use:   "update ENDPOINT_ID [JSON_PAYLOAD]",
 		Short: "Update an application by id",
 		Long: `Update an application by id
 
@@ -134,7 +134,7 @@ Example Schema:
   "url": "string",
   "version": 1,
   "description": "",
-  "filterTypes": [
+  "eventTypes": [
     "string"
   ]
 }
@@ -166,12 +166,10 @@ Example Schema:
 				printer.CheckErr(err)
 				ep.Url = &urlFlag
 			}
-			if cmd.Flags().Changed(filterTypesFlagName) {
-				/*
-					eventTypesFlag, err := cmd.Flags().GetStringArray(filterTypesFlagName)
-					printer.CheckErr(err)
-					ep.EventTypes = eventTypesFlag
-				*/
+			if cmd.Flags().Changed(eventTypesFlagName) {
+				eventTypesFlag, err := cmd.Flags().GetStringArray(eventTypesFlagName)
+				printer.CheckErr(err)
+				ep.EventTypes = eventTypesFlag
 			}
 			if cmd.Flags().Changed(disabledFlagName) {
 				disabledFlag, err := cmd.Flags().GetBool(disabledFlagName)
@@ -179,8 +177,8 @@ Example Schema:
 				ep.Disabled = &disabledFlag
 			}
 
-			svixClient := getWalletClientOrExit()
-			out, err := svixClient.Webhook.Update(cmd.Context(), endpointID, &ep)
+			walletClient := getWalletClientOrExit()
+			out, err := walletClient.Webhook.Update(cmd.Context(), endpointID, &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -188,7 +186,7 @@ Example Schema:
 	}
 	update.Flags().String(urlFlagName, "", "")
 	update.Flags().Int32(versionFlagName, 1, "")
-	update.Flags().StringArray(filterTypesFlagName, []string{}, "")
+	update.Flags().StringArray(eventTypesFlagName, []string{}, "")
 	update.Flags().Bool(disabledFlagName, false, "")
 	ec.cmd.AddCommand(update)
 
@@ -204,8 +202,8 @@ Example Schema:
 
 			utils.Confirm(fmt.Sprintf("Are you sure you want to delete the the endpoint with id: %s", endpointID))
 
-			svixClient := getWalletClientOrExit()
-			err := svixClient.Webhook.Delete(cmd.Context(), endpointID)
+			walletClient := getWalletClientOrExit()
+			err := walletClient.Webhook.Delete(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			fmt.Printf("Endpoint \"%s\" Deleted!\n", endpointID)
@@ -224,8 +222,8 @@ Example Schema:
 				// parse args
 				endpointID := args[0]
 
-				svixClient := getWalletClientOrExit()
-				out, err := svixClient.Webhook.GetSecret(cmd.Context(), endpointID)
+				walletClient := getWalletClientOrExit()
+				out, err := walletClient.Webhook.GetSecret(cmd.Context(), endpointID)
 				printer.CheckErr(err)
 
 				printer.Print(out)
@@ -246,12 +244,12 @@ func getEndpointListOptions(cmd *cobra.Command) *wallet.ListWebhookOptions {
 	limit, _ := cmd.Flags().GetInt32("limit")
 
 	opts := &wallet.ListWebhookOptions{
-		Limit: limit,
+		Limit: &limit,
 	}
 
 	cursorFlag, _ := cmd.Flags().GetString("cursor")
 	if cmd.Flags().Changed("iterator") {
-		opts.Cursor = cursorFlag
+		opts.Cursor = &cursorFlag
 	}
 
 	return opts

@@ -11,8 +11,11 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/main.go",
             "args": [
-                "wallet",
-                "list"
+                "address",
+                "get",
+                "9bdabc5c-e1bd-4a04-b47e-66c8d91a378e",
+                "USDT",
+                "tron"
             ]
         }
     ]

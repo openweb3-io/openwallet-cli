@@ -205,10 +205,10 @@ func addWalletFilterFlags(cmd *cobra.Command) {
 }
 
 func getWalletListOptions(cmd *cobra.Command) *wallet.ListWalletOptions {
-	limit, _ := cmd.Flags().GetInt("limit")
+	limit, _ := cmd.Flags().GetInt32("limit")
 
 	opts := &wallet.ListWalletOptions{
-		Limit: limit,
+		Limit: &limit,
 	}
 
 	cursorFlag, _ := cmd.Flags().GetString("cursor")

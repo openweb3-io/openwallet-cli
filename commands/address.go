@@ -34,8 +34,32 @@ func newAddressCmd() *addressCmd {
 			printer.Print(l)
 		},
 	}
-	addWalletFilterFlags(list)
+	addAddressFilterFlags(list)
 	wc.cmd.AddCommand(list)
+
+	// get
+	get := &cobra.Command{
+		Use:   "get DEPOSIT_ADDRESS",
+		Short: "Get an deposit address by network",
+		Args:  validators.ExactArgs(3),
+		Run: func(cmd *cobra.Command, args []string) {
+			printer := pretty.NewPrinter(getPrinterOptions())
+
+			walletID := args[0]
+			currency := args[1]
+			network := args[2]
+
+			walletClient := getWalletClientOrExit()
+			out, err := walletClient.Address.GetDepositAddress(cmd.Context(), walletID, &wallet.GetDepositAddressOptions{
+				Currency: currency,
+				Network:  &network,
+			})
+			printer.CheckErr(err)
+
+			printer.Print(out)
+		},
+	}
+	wc.cmd.AddCommand(get)
 
 	return wc
 }
@@ -47,15 +71,15 @@ func addAddressFilterFlags(cmd *cobra.Command) {
 
 // TODO cursor
 func getAddressListOptions(cmd *cobra.Command) *wallet.ListAddressOptions {
-	limit, _ := cmd.Flags().GetInt("limit")
+	limit, _ := cmd.Flags().GetInt32("limit")
 
 	opts := &wallet.ListAddressOptions{
-		Limit: limit,
+		Limit: &limit,
 	}
 
 	cursorFlag, _ := cmd.Flags().GetString("cursor")
 	if cmd.Flags().Changed("cursor") {
-		opts.Cursor = cursorFlag
+		opts.Cursor = &cursorFlag
 	}
 
 	return opts
