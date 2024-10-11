@@ -30,7 +30,7 @@ func newEndpointCmd() *endpointCmd {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
 			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Webhook.List(cmd.Context(), getEndpointListOptions(cmd))
+			l, err := walletClient.WebhookEndpoint.List(cmd.Context(), getEndpointListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -42,7 +42,7 @@ func newEndpointCmd() *endpointCmd {
 	// create
 	urlFlagName := "data-url"
 	versionFlagName := "data-version"
-	eventTypesFlagName := "data-eventTypes"
+	filterTypesFlagName := "data-filterTypes"
 	disabledFlagName := "data-disabled"
 	create := &cobra.Command{
 		Use:   "create [JSON_PAYLOAD]",
@@ -70,7 +70,7 @@ Example Schema:
 				in, err = utils.ReadStdin()
 				printer.CheckErr(err)
 			}
-			var ep wallet.CreateWebhookIn
+			var ep wallet.CreateEndpointIn
 			if len(in) > 0 {
 				err := json.Unmarshal(in, &ep)
 				printer.CheckErr(err)
@@ -82,10 +82,10 @@ Example Schema:
 				printer.CheckErr(err)
 				ep.Url = urlFlag
 			}
-			if cmd.Flags().Changed(eventTypesFlagName) {
-				eventTypesFlag, err := cmd.Flags().GetStringArray(eventTypesFlagName)
+			if cmd.Flags().Changed(filterTypesFlagName) {
+				filterTypesFlag, err := cmd.Flags().GetStringArray(filterTypesFlagName)
 				printer.CheckErr(err)
-				ep.EventTypes = eventTypesFlag
+				ep.FilterTypes = filterTypesFlag
 			}
 			if cmd.Flags().Changed(disabledFlagName) {
 				disabledFlag, err := cmd.Flags().GetBool(disabledFlagName)
@@ -93,7 +93,7 @@ Example Schema:
 				ep.Disabled = &disabledFlag
 			}
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Webhook.Create(cmd.Context(), &ep)
+			out, err := walletClient.WebhookEndpoint.Create(cmd.Context(), &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -101,7 +101,7 @@ Example Schema:
 	}
 	create.Flags().String(urlFlagName, "", "")
 	create.Flags().Int32(versionFlagName, 0, "")
-	create.Flags().StringArray(eventTypesFlagName, []string{}, "")
+	create.Flags().StringArray(filterTypesFlagName, []string{}, "")
 	create.Flags().Bool(disabledFlagName, false, "")
 	ec.cmd.AddCommand(create)
 
@@ -116,7 +116,7 @@ Example Schema:
 			endpointID := args[0]
 
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Webhook.Retrieve(cmd.Context(), endpointID)
+			out, err := walletClient.WebhookEndpoint.Retrieve(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -154,7 +154,7 @@ Example Schema:
 				in, err = utils.ReadStdin()
 				printer.CheckErr(err)
 			}
-			var ep wallet.UpdateWebhookIn
+			var ep wallet.UpdateEndpointIn
 			if len(in) > 0 {
 				err := json.Unmarshal(in, &ep)
 				printer.CheckErr(err)
@@ -166,10 +166,10 @@ Example Schema:
 				printer.CheckErr(err)
 				ep.Url = &urlFlag
 			}
-			if cmd.Flags().Changed(eventTypesFlagName) {
-				eventTypesFlag, err := cmd.Flags().GetStringArray(eventTypesFlagName)
+			if cmd.Flags().Changed(filterTypesFlagName) {
+				filterTypesFlag, err := cmd.Flags().GetStringArray(filterTypesFlagName)
 				printer.CheckErr(err)
-				ep.EventTypes = eventTypesFlag
+				ep.FilterTypes = filterTypesFlag
 			}
 			if cmd.Flags().Changed(disabledFlagName) {
 				disabledFlag, err := cmd.Flags().GetBool(disabledFlagName)
@@ -178,7 +178,7 @@ Example Schema:
 			}
 
 			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Webhook.Update(cmd.Context(), endpointID, &ep)
+			out, err := walletClient.WebhookEndpoint.Update(cmd.Context(), endpointID, &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -186,7 +186,7 @@ Example Schema:
 	}
 	update.Flags().String(urlFlagName, "", "")
 	update.Flags().Int32(versionFlagName, 1, "")
-	update.Flags().StringArray(eventTypesFlagName, []string{}, "")
+	update.Flags().StringArray(filterTypesFlagName, []string{}, "")
 	update.Flags().Bool(disabledFlagName, false, "")
 	ec.cmd.AddCommand(update)
 
@@ -203,7 +203,7 @@ Example Schema:
 			utils.Confirm(fmt.Sprintf("Are you sure you want to delete the the endpoint with id: %s", endpointID))
 
 			walletClient := getWalletClientOrExit()
-			err := walletClient.Webhook.Delete(cmd.Context(), endpointID)
+			err := walletClient.WebhookEndpoint.Delete(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			fmt.Printf("Endpoint \"%s\" Deleted!\n", endpointID)

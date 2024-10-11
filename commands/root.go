@@ -59,6 +59,7 @@ func init() {
 	rootCmd.AddCommand(newTransactionCmd().cmd)
 	rootCmd.AddCommand(newAddressCmd().cmd)
 	rootCmd.AddCommand(newRateCmd().cmd)
+	rootCmd.AddCommand(newEventTypeCmd().cmd)
 	rootCmd.AddCommand(newEndpointCmd().cmd)
 	rootCmd.AddCommand(newVerifyCmd().cmd)
 	rootCmd.AddCommand(newOpenCmd().cmd)
