@@ -30,8 +30,8 @@ func newWalletCmd() *walletCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Wallet.List(cmd.Context(), getWalletListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.Wallet.List(cmd.Context(), getWalletListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -85,8 +85,8 @@ Example Schema:
 				wallet.SetUid(uidFlag)
 			}
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Create(cmd.Context(), &wallet)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Wallet.Create(cmd.Context(), &wallet)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -105,8 +105,8 @@ Example Schema:
 
 			walletID := args[0]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Retrieve(cmd.Context(), walletID)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Wallet.Retrieve(cmd.Context(), walletID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -159,8 +159,8 @@ Example Schema:
 				wallet.SetUid(uidFlag)
 			}
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Wallet.Update(cmd.Context(), walletID, &wallet)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Wallet.Update(cmd.Context(), walletID, &wallet)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -185,8 +185,8 @@ Example Schema:
 
 					utils.Confirm(fmt.Sprintf("Are you sure you want to delete the the wallet with id: %s", walletID))
 
-					walletClient := getWalletClientOrExit()
-					err := walletClient.Wallet.Delete(cmd.Context(), appID, walletID)
+					apiClient := getAPIClientOrExit()
+					err := apiClient.Wallet.Delete(cmd.Context(), appID, walletID)
 					printer.CheckErr(err)
 
 					fmt.Printf("Wallet \"%s\" Deleted!\n", walletID)

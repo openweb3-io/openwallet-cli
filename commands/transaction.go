@@ -27,8 +27,8 @@ func newTransactionCmd() *transactionCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Transaction.List(cmd.Context(), getTransactionListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.Transaction.List(cmd.Context(), getTransactionListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -46,8 +46,8 @@ func newTransactionCmd() *transactionCmd {
 
 			transactionID := args[0]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Transaction.Retrieve(cmd.Context(), transactionID)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Transaction.Retrieve(cmd.Context(), transactionID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -114,8 +114,8 @@ func newTransactionCmd() *transactionCmd {
 					req.feeType = feeTypeFlag
 				}
 
-				walletClient := getWalletClientOrExit()
-				walletClient.Transaction.EstimateFee()
+				apiClient := getAPIClientOrExit()
+				apiClient.Transaction.EstimateFee()
 				out, err := walletClient.Webhook.Create(cmd.Context(), &req)
 				printer.CheckErr(err)
 				printer.Print(out)

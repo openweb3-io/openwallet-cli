@@ -27,8 +27,8 @@ func newChainCmd() *chainCmd {
 			/*
 				printer := pretty.NewPrinter(getPrinterOptions())
 
-				walletClient := getWalletClientOrExit()
-				l, err := walletClient.Chain.List(cmd.Context(), getCurrencyListOptions(cmd))
+				apiClient := getAPIClientOrExit()
+				l, err := apiClient.Chain.List(cmd.Context(), getCurrencyListOptions(cmd))
 				printer.CheckErr(err)
 
 				printer.Print(l)
@@ -46,8 +46,8 @@ func newChainCmd() *chainCmd {
 			/*
 				printer := pretty.NewPrinter(getPrinterOptions())
 
-				walletClient := getWalletClientOrExit()
-				l, err := walletClient.Chain.List(cmd.Context(), getCurrencyListOptions(cmd))
+				apiClient := getAPIClientOrExit()
+				l, err := apiClient.Chain.List(cmd.Context(), getCurrencyListOptions(cmd))
 				printer.CheckErr(err)
 
 				printer.Print(l)
@@ -68,7 +68,7 @@ func newChainCmd() *chainCmd {
 
 				chainId := args[0]
 
-				walletClient := getWalletClientOrExit()
+				apiClient := getAPIClientOrExit()
 				out, err := walletClient.Chain.Get(cmd.Context(), chainId)
 				printer.CheckErr(err)
 				printer.Print(out)

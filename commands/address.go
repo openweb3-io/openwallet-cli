@@ -30,8 +30,8 @@ func newAddressCmd() *addressCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Address.List(cmd.Context(), getAddressListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.Address.List(cmd.Context(), getAddressListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -52,8 +52,8 @@ func newAddressCmd() *addressCmd {
 			currency := args[1]
 			network := args[2]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Address.GetDepositAddress(cmd.Context(), walletID, &wallet.GetDepositAddressOptions{
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Address.GetDepositAddress(cmd.Context(), walletID, &wallet.GetDepositAddressOptions{
 				Currency: currency,
 				Network:  &network,
 			})

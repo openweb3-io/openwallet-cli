@@ -30,8 +30,8 @@ func newAccountCmd() *accountCmd {
 
 			walletID := args[0]
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Wallet.ListAccounts(cmd.Context(), walletID, getAccountListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.Wallet.ListAccounts(cmd.Context(), walletID, getAccountListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)

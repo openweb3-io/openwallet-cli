@@ -23,8 +23,8 @@ func newEventTypeCmd() *eventTypeCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.WebhookEventTypes.List(cmd.Context()) // , getEventTypeListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.WebhookEventTypes.List(cmd.Context()) // , getEventTypeListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)

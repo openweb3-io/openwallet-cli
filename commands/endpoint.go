@@ -29,8 +29,8 @@ func newEndpointCmd() *endpointCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.WebhookEndpoint.List(cmd.Context(), getEndpointListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.WebhookEndpoint.List(cmd.Context(), getEndpointListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -92,8 +92,8 @@ Example Schema:
 				printer.CheckErr(err)
 				ep.Disabled = &disabledFlag
 			}
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.WebhookEndpoint.Create(cmd.Context(), &ep)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.WebhookEndpoint.Create(cmd.Context(), &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -115,8 +115,8 @@ Example Schema:
 
 			endpointID := args[0]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.WebhookEndpoint.Retrieve(cmd.Context(), endpointID)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.WebhookEndpoint.Retrieve(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -177,8 +177,8 @@ Example Schema:
 				ep.Disabled = &disabledFlag
 			}
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.WebhookEndpoint.Update(cmd.Context(), endpointID, &ep)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.WebhookEndpoint.Update(cmd.Context(), endpointID, &ep)
 			printer.CheckErr(err)
 
 			printer.Print(out)
@@ -202,8 +202,8 @@ Example Schema:
 
 			utils.Confirm(fmt.Sprintf("Are you sure you want to delete the the endpoint with id: %s", endpointID))
 
-			walletClient := getWalletClientOrExit()
-			err := walletClient.WebhookEndpoint.Delete(cmd.Context(), endpointID)
+			apiClient := getAPIClientOrExit()
+			err := apiClient.WebhookEndpoint.Delete(cmd.Context(), endpointID)
 			printer.CheckErr(err)
 
 			fmt.Printf("Endpoint \"%s\" Deleted!\n", endpointID)
@@ -222,8 +222,8 @@ Example Schema:
 				// parse args
 				endpointID := args[0]
 
-				walletClient := getWalletClientOrExit()
-				out, err := walletClient.Webhook.GetSecret(cmd.Context(), endpointID)
+				apiClient := getAPIClientOrExit()
+				out, err := apiClient.Webhook.GetSecret(cmd.Context(), endpointID)
 				printer.CheckErr(err)
 
 				printer.Print(out)

@@ -30,8 +30,8 @@ func newRateCmd() *rateCmd {
 			toCurrency := args[1]
 			baseAmount := args[2]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Rate.Estimate(cmd.Context(), &wallet.EstimateOptions{
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Rate.Estimate(cmd.Context(), &wallet.EstimateOptions{
 				BaseCurrency: baseCurrency,
 				BaseAmount:   baseAmount,
 				ToCurrency:   toCurrency,
@@ -54,8 +54,8 @@ func newRateCmd() *rateCmd {
 			baseCurrency := args[0]
 			toCurrency := args[1]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Rate.GetRates(cmd.Context(), &wallet.GetRatesIn{
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Rate.GetRates(cmd.Context(), &wallet.GetRatesIn{
 				Pairs: []wallet.CurrencyPair{
 					{
 						BaseCurrency: baseCurrency,

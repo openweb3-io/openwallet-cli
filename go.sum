@@ -46,6 +46,10 @@ github.com/openweb3-io/wallet-openapi/go v0.0.0-20241010093530-462fbdc1c400 h1:3
 github.com/openweb3-io/wallet-openapi/go v0.0.0-20241010093530-462fbdc1c400/go.mod h1:AVjGS8rJLkGYzPd6FxOYSu//sm+ykfyc0XIjXDt4tlU=
 github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011010114-fe406b4f502d h1:LtnsuY0MtwBbNEzP9zpujpgQu2rpZGVMUSbmr2jHd/k=
 github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011010114-fe406b4f502d/go.mod h1:AVjGS8rJLkGYzPd6FxOYSu//sm+ykfyc0XIjXDt4tlU=
+github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011122621-f910cd407264 h1:K/EKjj42WhUR25nDgTLveeuPrfPd6DNCJjaj0Bvm2zk=
+github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011122621-f910cd407264/go.mod h1:AVjGS8rJLkGYzPd6FxOYSu//sm+ykfyc0XIjXDt4tlU=
+github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011131653-5073befec616 h1:03eAO7H9iJ83+Qpmj9Ve0w6ZAPkZsO9phD4XRZ8c2yc=
+github.com/openweb3-io/wallet-openapi/go v0.0.0-20241011131653-5073befec616/go.mod h1:AVjGS8rJLkGYzPd6FxOYSu//sm+ykfyc0XIjXDt4tlU=
 github.com/pelletier/go-toml/v2 v2.2.2 h1:aYUidT7k73Pcl9nb2gScu7NSrKCSHIDE89b3+6Wq+LM=
 github.com/pelletier/go-toml/v2 v2.2.2/go.mod h1:1t835xjRzz80PqgE6HHgN2JOsmgYu/h4qDAS4n929Rs=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

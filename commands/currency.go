@@ -27,8 +27,8 @@ func newCurrencyCmd() *currencyCmd {
 		Run: func(cmd *cobra.Command, args []string) {
 			printer := pretty.NewPrinter(getPrinterOptions())
 
-			walletClient := getWalletClientOrExit()
-			l, err := walletClient.Currency.List(cmd.Context(), getCurrencyListOptions(cmd))
+			apiClient := getAPIClientOrExit()
+			l, err := apiClient.Currency.List(cmd.Context(), getCurrencyListOptions(cmd))
 			printer.CheckErr(err)
 
 			printer.Print(l)
@@ -47,8 +47,8 @@ func newCurrencyCmd() *currencyCmd {
 
 			code := args[0]
 
-			walletClient := getWalletClientOrExit()
-			out, err := walletClient.Currency.FindByCode(cmd.Context(), code)
+			apiClient := getAPIClientOrExit()
+			out, err := apiClient.Currency.FindByCode(cmd.Context(), code)
 			printer.CheckErr(err)
 
 			printer.Print(out)

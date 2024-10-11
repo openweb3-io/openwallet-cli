@@ -89,7 +89,7 @@ func initConfig() {
 	_ = viper.ReadInConfig()
 }
 
-func getWalletClientOrExit() *wallet.WalletClient {
+func getAPIClientOrExit() *wallet.APIClient {
 	apikey := viper.GetString("apikey")
 	secret := viper.GetString("secret")
 	if secret == "" {
@@ -98,12 +98,12 @@ func getWalletClientOrExit() *wallet.WalletClient {
 		os.Exit(1)
 	}
 
-	opts := getWalletClientOptsOrExit(apikey, secret)
+	opts := getAPIClientOptsOrExit(apikey, secret)
 	return wallet.New(opts)
 }
 
-func getWalletClientOptsOrExit(apikey, secret string) *wallet.WalletClientOptions {
-	opts := &wallet.WalletClientOptions{}
+func getAPIClientOptsOrExit(apikey, secret string) *wallet.APIClientOptions {
+	opts := &wallet.APIClientOptions{}
 	rawServerUrl := viper.GetString("server_url")
 
 	// fallback to debug_url for backwards compatibility
